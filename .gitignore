@@ -6,3 +6,5 @@ server.log
 __pycache__/
 *.pyc
 .DS_Store
+邮聊Mac版.zip
+*.zip
