@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>邮聊</title>
+<link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/tech.css">
+</head>
+<body>
+
+<!-- ===== 图标库 ===== -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M12 3C6.9 3 3 6.4 3 10.6c0 2.3 1.2 4.4 3.1 5.8-.1 1-.6 2.3-1.5 3.4 1.7-.2 3.3-.9 4.4-1.7.9.2 1.9.4 3 .4 5.1 0 9-3.4 9-7.9S17.1 3 12 3z"/></symbol>
+  <symbol id="i-contacts" viewBox="0 0 24 24"><path d="M9 11a3.6 3.6 0 1 0 0-7.2A3.6 3.6 0 0 0 9 11zm0 1.8c-3 0-7 1.5-7 4.5V20h14v-2.7c0-3-4-4.5-7-4.5zM16.5 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1.8c-.8 0-1.7.1-2.4.4 1.3 1.1 2 2.4 2 4.1V20H23v-2.2c0-2.7-3.2-5-6.5-5z"/></symbol>
+  <symbol id="i-me" viewBox="0 0 24 24"><path d="M12 12a4.2 4.2 0 1 0 0-8.4A4.2 4.2 0 0 0 12 12zm0 2c-3.9 0-9 2-9 5.6V21h18v-1.4c0-3.6-5.1-5.6-9-5.6z"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15.5 4.5 8 12l7.5 7.5 1.4-1.4L10.8 12l6.1-6.1z"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm12 8v10H5V10h14zM5 6h14v2H5V6z"/></symbol>
+  <symbol id="i-compose" viewBox="0 0 24 24"><path d="M4 20h4.5L20 8.5 15.5 4 4 15.5V20zm14.7-14.7 1.8-1.8a1 1 0 0 1 1.4 0l1.1 1.1a1 1 0 0 1 0 1.4l-1.8 1.8-2.5-2.5z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><path d="M10 2a8 8 0 1 0 4.9 14.3l5 5 1.4-1.4-5-5A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M3 20.5 21 12 3 3.5 3 10l12 2-12 2z"/></symbol>
+  <symbol id="i-ai" viewBox="0 0 24 24"><path d="M12 2l1.9 5.6L19.5 9.5 13.9 11.4 12 17l-1.9-5.6L4.5 9.5l5.6-1.9L12 2zM19 14l.9 2.6 2.6.9-2.6.9L19 21l-.9-2.6-2.6-.9 2.6-.9L19 14zM5 14l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7L5 14z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5z"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12 19 6.4 17.6 5 12 10.6 6.4 5z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm-1 3v6l5 3 1-1.7-4-2.3V7h-2z"/></symbol>
+  <symbol id="i-translate" viewBox="0 0 24 24"><path d="M3 5h9v2H8.6c.4 2.3 1.5 4.4 3 5.9l-1.2 1.2A11 11 0 0 1 6.6 9H5a12 12 0 0 0 5.2 5.2l-.8 1.5A13.6 13.6 0 0 1 4 9V5zm11.5 0H21v2h-2.3c.2 1.6.8 3 1.6 4.2l-1.7 1A9 9 0 0 1 16.7 7h-2.2V5zm-1 7 1.2 2.5L20 22h-2.2l-2.4-4.6L13.5 22h-2.2l3.9-7.6L14 12z"/></symbol>
+  <symbol id="i-summary" viewBox="0 0 24 24"><path d="M4 4h16v2H4V4zm0 5h16v2H4V9zm0 5h11v2H4v-2zm0 5h16v2H4v-2z"/></symbol>
+  <symbol id="i-reply" viewBox="0 0 24 24"><path d="M10 5V2L2 9l8 7v-3.2c5 0 8.6 1.5 11 5.2-.5-6-4-12-11-13z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><path d="M8 2h11a2 2 0 0 1 2 2v11h-2V4H8V2zM4 6h11a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm0 2v12h11V8H4z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M9 3h6l1 2h4v2H4V5h4l1-2zM5 8h14l-1 13H6L5 8zm4 2v9h2v-9H9zm4 0v9h2v-9h-2z"/></symbol>
+</svg>
+
+<div id="app">
+  <!-- ========== 聊天列表 ========== -->
+  <section id="view-chats" class="view active">
+    <header class="topbar">
+      <div class="topbar-title">邮聊</div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="btnReadAll" title="一键全部已读"><svg class="icon"><use href="#i-check"/></svg></button>
+        <button class="icon-btn" id="btnCalendar" title="日历"><svg class="icon"><use href="#i-calendar"/></svg></button>
+        <button class="icon-btn" id="btnCompose" title="写新邮件"><svg class="icon"><use href="#i-compose"/></svg></button>
+      </div>
+    </header>
+    <div class="search-wrap">
+      <svg class="icon search-icon"><use href="#i-search"/></svg>
+      <input id="searchChats" placeholder="搜索联系人或邮件内容" autocomplete="off">
+    </div>
+    <div id="demoBanner" class="demo-banner hidden">
+      <span>👀 这里是<b>演示数据</b>，让你先熟悉界面。配置好邮箱后会自动变成真实邮件。</span>
+      <button class="mini-btn" id="btnClearDemo">清除演示数据</button>
+    </div>
+    <div class="content" id="chatList"></div>
+  </section>
+
+  <!-- ========== 联系人 ========== -->
+  <section id="view-contacts" class="view">
+    <header class="topbar">
+      <div class="topbar-title">联系人</div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="btnCompose2" title="写新邮件"><svg class="icon"><use href="#i-plus"/></svg></button>
+      </div>
+    </header>
+    <div class="search-wrap">
+      <svg class="icon search-icon"><use href="#i-search"/></svg>
+      <input id="searchContacts" placeholder="搜索联系人" autocomplete="off">
+    </div>
+    <div class="content" id="contactList"></div>
+  </section>
+
+  <!-- ========== 我的 / 设置 ========== -->
+  <section id="view-me" class="view">
+    <header class="topbar">
+      <div class="topbar-title">我的</div>
+      <div class="topbar-actions">
+        <button class="text-btn" id="btnHelp">使用说明</button>
+      </div>
+    </header>
+    <div class="content" id="meContent"></div>
+  </section>
+
+  <!-- ========== 底部三个按钮 ========== -->
+  <nav class="tabbar">
+    <button class="tab active" data-tab="chats">
+      <svg class="icon"><use href="#i-chat"/></svg><span>聊天</span>
+      <em class="tab-badge hidden" id="tabBadge">0</em>
+    </button>
+    <button class="tab" data-tab="contacts">
+      <svg class="icon"><use href="#i-contacts"/></svg><span>联系人</span>
+    </button>
+    <button class="tab" data-tab="me">
+      <svg class="icon"><use href="#i-me"/></svg><span>我的</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ========== 聊天详情（滑入） ========== -->
+<section id="view-chat" class="overlay">
+  <header class="topbar">
+    <button class="icon-btn" id="btnBackChat"><svg class="icon"><use href="#i-back"/></svg></button>
+    <div class="topbar-title" id="chatTitle">聊天</div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="btnChatInfo" title="联系人详情"><svg class="icon"><use href="#i-more"/></svg></button>
+    </div>
+  </header>
+  <div class="content chat-scroll" id="msgList"></div>
+
+  <div class="quick-row" id="quickRow"></div>
+  <div class="input-bar">
+    <button class="ai-fab" id="btnAI" title="AI 帮我回复"><svg class="icon"><use href="#i-ai"/></svg></button>
+    <textarea id="msgInput" rows="1" placeholder="写邮件回复…（Enter 发送，Shift+Enter 换行）"></textarea>
+    <button class="send-btn" id="btnSend">发送</button>
+  </div>
+</section>
+
+<!-- ========== AI 面板 ========== -->
+<section id="aiPanel" class="ai-panel">
+  <header class="topbar">
+    <button class="icon-btn" id="btnCloseAI"><svg class="icon"><use href="#i-back"/></svg></button>
+    <div class="topbar-title">AI 帮我写</div>
+    <div class="topbar-actions"><button class="text-btn" id="btnAIRegen">重新生成</button></div>
+  </header>
+  <div class="ai-body">
+    <div class="ai-label">1️⃣ 你想怎么回复？（用大白话写就行）</div>
+    <textarea id="aiIntent" rows="3" placeholder="例如：答应参加周四的会，请他把资料提前发我；语气客气一点"></textarea>
+    <div class="chip-row" id="aiIntentChips">
+      <button class="chip">礼貌地答应</button>
+      <button class="chip">委婉拒绝，并提议改期</button>
+      <button class="chip">表示已收到，会尽快处理</button>
+      <button class="chip">问清楚时间和地点</button>
+      <button class="chip">感谢并确认下一步</button>
+    </div>
+    <button class="primary-btn" id="btnAIGenerate"><svg class="icon"><use href="#i-ai"/></svg> 生成回复</button>
+    <div class="ai-label">2️⃣ AI 草稿（可以直接改）</div>
+    <textarea id="aiDraft" rows="8" placeholder="生成后会出现在这里，不满意可以改，也可以点“重新生成”"></textarea>
+    <div class="ai-actions">
+      <button class="ghost-btn" id="btnAIInsert">放进输入框</button>
+      <button class="primary-btn" id="btnAISend">直接发送</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 日历 ========== -->
+<section id="view-calendar" class="overlay">
+  <header class="topbar">
+    <button class="icon-btn" id="btnBackCal"><svg class="icon"><use href="#i-back"/></svg></button>
+    <div class="topbar-title">日历</div>
+    <div class="topbar-actions">
+      <button class="text-btn" id="btnCalToday">今天</button>
+      <button class="icon-btn" id="btnCalAdd" title="新建日程"><svg class="icon"><use href="#i-plus"/></svg></button>
+    </div>
+  </header>
+  <div class="content" id="calContent">
+    <div class="cal-nav">
+      <button class="icon-btn" id="calPrev"><svg class="icon"><use href="#i-back"/></svg></button>
+      <div class="cal-title" id="calTitle">2026年10月</div>
+      <button class="icon-btn flip" id="calNext"><svg class="icon"><use href="#i-back"/></svg></button>
+    </div>
+    <div class="cal-weekdays" id="calWeekdays"></div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-section">
+      <div class="section-title" id="dayTitle">今天的日程</div>
+      <div id="dayAgenda"></div>
+    </div>
+    <div class="cal-section">
+      <div class="section-title">接下来</div>
+      <div id="upcomingList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 通用弹层 ========== -->
+<div id="mask" class="mask hidden"></div>
+
+<div id="actionSheet" class="sheet hidden">
+  <div class="sheet-title" id="sheetTitle">对这条邮件</div>
+  <div class="sheet-grid" id="sheetGrid"></div>
+  <button class="sheet-cancel" id="sheetCancel">取消</button>
+</div>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-head">
+    <div class="modal-title" id="modalTitle">标题</div>
+    <button class="icon-btn" id="modalClose"><svg class="icon"><use href="#i-close"/></svg></button>
+  </div>
+  <div class="modal-body" id="modalBody"></div>
+  <div class="modal-foot" id="modalFoot"></div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

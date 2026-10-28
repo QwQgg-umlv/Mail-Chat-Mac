@@ -1,0 +1,4 @@
+#!/bin/bash
+# 邮聊.app 本体：交给「启动邮聊.command」跑（弹出运行窗口；关掉窗口 = 退出邮聊）
+DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
+open -a Terminal "$DIR/启动邮聊.command"

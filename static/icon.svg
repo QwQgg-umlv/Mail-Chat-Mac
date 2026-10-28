@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A0F16"/><stop offset="1" stop-color="#101C26"/>
+    </linearGradient>
+    <linearGradient id="env" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00F5A0"/><stop offset="1" stop-color="#00D2F5"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="58" fill="url(#bg)"/>
+  <rect x="3" y="3" width="250" height="250" rx="56" fill="none" stroke="#00F5A0" stroke-opacity=".3" stroke-width="3"/>
+  <polygon points="52,158 52,236 132,168" fill="#000" opacity=".35"/>
+  <path d="M46 58 h164 a30 30 0 0 1 30 30 v64 a30 30 0 0 1 -30 30 h-8 a8 8 0 0 0 -8 8 v22 a6 6 0 0 1 -10 4 l-52 -38 h-86 a30 30 0 0 1 -30 -30 v-60 a30 30 0 0 1 30 -30 z" fill="url(#env)"/>
+  <polygon points="46,74 128,138 210,74 210,92 128,156 46,92" fill="#061A14" opacity=".92"/>
+  <polyline points="56,66 128,122 200,66" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="4"/>
+  <circle cx="146" cy="156" r="9" fill="#061A14" opacity=".92"/>
+  <circle cx="170" cy="156" r="9" fill="#061A14" opacity=".92"/>
+  <circle cx="194" cy="156" r="9" fill="#061A14" opacity=".92"/>
+</svg>
