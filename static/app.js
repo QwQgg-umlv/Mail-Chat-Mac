@@ -178,7 +178,7 @@ async function openChat(email) {
   renderQuickReplies();
   api('/api/messages/read', 'POST', { email }).then(() => refreshChats()).catch(() => {});
 }
-function renderMessages() {
+function renderMessages(keep) {
   const box = $('#msgList');
   const out = [];
   let lastDay = '';
@@ -212,8 +212,11 @@ function renderMessages() {
         </div>
       </div>`);
   }
+  const keepPos = box.scrollTop;
   box.innerHTML = out.join('') || '<div class="empty-tip">还没有邮件，点右上角 ✏️ 写第一封</div>';
-  box.scrollTop = box.scrollHeight;
+  // 展开全文/看原文是原地交互：保持视口别跳底；其余场景（开聊天/新消息）照旧滚到最新
+  if (keep) box.scrollTop = keepPos;
+  else box.scrollTop = box.scrollHeight;
 }
 
 function lastIncoming() {
@@ -468,12 +471,36 @@ function renderSearchResults(q) {
         await openChat(email);
         scrollToMsg(parseInt(el.dataset.id, 10));
       });
+      // 深链自动直达第一条（便利贴 #q= 跳转）
+      if (window.__autoHitFirst && hits.length) {
+        window.__autoHitFirst = false;
+        const first = document.querySelector('#searchHits .search-hit');
+        if (first) first.click();
+      }
     } catch (e) {
       const box = $('#searchHits');
       if (box) box.innerHTML = `<div class="empty-tip">搜索失败：${esc(e.message)}</div>`;
     }
   }, 250);
 }
+
+/* ---------- 便利贴深链：#q=关键词 → 自动搜索并直达第一封邮件 ---------- */
+function applyMailDeepLink() {
+  const m = location.hash.match(/^#q=(.+)$/);
+  if (!m) return;
+  let q = '';
+  try { q = decodeURIComponent(m[1]); } catch (e) { q = m[1]; }
+  if (!q) return;
+  const box = $('#searchChats');
+  if (box) box.value = q;
+  searchScope = 'subject';   // 深链默认按主题搜（便利贴传的都是主题词）
+  window.__autoHitFirst = true;
+  renderSearchResults(q);
+}
+applyMailDeepLink();
+window.addEventListener('hashchange', applyMailDeepLink);
+// 首次深链要等 init（app.js 底部）渲染完聊天列表后再执行，否则视图会被 init 覆盖
+window.addEventListener('load', function(){ setTimeout(applyMailDeepLink, 350); });
 
 /* ---------- 联系人（微信同款：字母分组 + 右侧导轨可拖动） ---------- */
 const PY_SURNAMES = { '张':'Z','王':'W','李':'L','刘':'L','陈':'C','杨':'Y','黄':'H','赵':'Z','吴':'W','周':'Z','徐':'X','孙':'S','马':'M','朱':'P','胡':'H','郭':'G','何':'H','林':'L','高':'G','罗':'L','郑':'Z','梁':'L','谢':'X','宋':'S','唐':'T','许':'X','韩':'H','冯':'F','邓':'D','曹':'C','彭':'P','曾':'Z','肖':'X','田':'T','董':'D','袁':'Y','潘':'P','于':'Y','蒋':'J','蔡':'C','余':'Y','杜':'D','叶':'Y','程':'C','苏':'S','魏':'W','吕':'L','丁':'D','任':'R','沈':'S','姚':'Y','卢':'L','姜':'J','崔':'C','钟':'Z','谭':'T','陆':'L','汪':'W','范':'F','金':'J','石':'S','廖':'L','贾':'J','夏':'X','韦':'W','傅':'F','方':'F','白':'B','邹':'Z','孟':'M','熊':'X','秦':'Q','邱':'Q','江':'J','尹':'Y','薛':'X','段':'D','雷':'L','侯':'H','龙':'L','史':'S','陶':'T','黎':'L','贺':'H','顾':'G','毛':'M','郝':'H','龚':'G','邵':'S','万':'W','钱':'Q','严':'Y','武':'W','戴':'D','莫':'M','孔':'K','向':'X','汤':'T','欧阳':'O','诸葛':'Z','司':'S','上官':'S','慕容':'M' };
@@ -1508,8 +1535,11 @@ function bindEvents() {
     const bubble = e.target.closest('.bubble');
     if (!bubble) return;
     if (e.target.classList.contains('expand-link')) {
-      state.expanded[bubble.dataset.id] = true;
-      renderMessages();
+      const id = bubble.dataset.id;
+      state.expanded[id] = true;
+      renderMessages(true);
+      const el = msgList.querySelector(`.bubble[data-id="${id}"]`);
+      if (el) el.scrollIntoView({ block: 'nearest' });
       return;
     }
     if (e.target.classList.contains('orig-btn')) {
@@ -1517,7 +1547,7 @@ function bindEvents() {
       state.showOrig = state.showOrig || {};
       const id = bubble.dataset.id;
       state.showOrig[id] = !state.showOrig[id];
-      renderMessages();
+      renderMessages(true);
       return;
     }
     if (pressed) { pressed = false; return; }
